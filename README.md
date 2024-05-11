@@ -1,65 +1,43 @@
-# Assignment Report: MLOps Implementation with Apache Airflow
+## MLOps Workflow with Apache Airflow
+# Overview
+This repository contains the implementation of an MLOps (Machine Learning Operations) workflow using Apache Airflow. The workflow automates the processes of data extraction, transformation, and version-controlled storage from news websites such as BBC.com and Dawn.com.
 
-## Introduction
+## Workflow Components
+1. Data Extraction
+The workflow begins by scraping the homepages of BBC.com and Dawn.com to extract the latest articles. Python libraries like requests and BeautifulSoup are used for this purpose.
 
-This report outlines the implementation of an MLOps workflow using Apache Airflow to automate the processes of data extraction, transformation, and version-controlled storage. The primary goal was to streamline the data handling processes from dawn.com and BBC.com, ensuring that the extracted data is cleaned, transformed, and stored efficiently with version tracking.
+2. Data Transformation
+Extracted data undergoes transformation to ensure cleanliness and suitable formatting. This includes removing unnecessary characters, standardizing text format, and structuring the data for analysis.
 
-## Workflow Description
+3. Data Storage and Version Control
+Transformed data is saved into a CSV file stored on Google Drive. Data Version Control (DVC) is employed to track changes in the dataset. DVC is configured with remote storage, and data files are added to DVC tracking and pushed to a Git repository for version control.
 
-### Data Extraction
+4. Apache Airflow DAG
+An Apache Airflow Directed Acyclic Graph (DAG) automates the entire process, scheduling and executing tasks daily. The DAG manages task dependencies and ensures error handling throughout the workflow.
 
-The data extraction process involves scraping the homepages of BBC.com and Dawn.com to retrieve the latest articles. Using Python's `requests` and `BeautifulSoup` libraries, the DAG extracts links, titles, and descriptions of articles from these sources.
+## Challenges Faced
+Airflow Installation on Windows: Due to compatibility issues, Airflow had to be installed with WSL (Windows Subsystem for Linux) Ubuntu.
 
-### Data Transformation
+BashOperator Permissions: Errors were encountered with BashOperator permissions while accessing Git credentials, which were resolved through trial and error.
 
-Extracted data undergoes transformation to clean and format the text appropriately. This includes removing excessive whitespace, special characters, and ensuring the text is in a suitable format for analysis. The transformation process prepares the data for storage by structuring it into a pandas DataFrame.
+## Usage Instructions
+Prepare Airflow DAG: Write the Python script for the Airflow DAG and place it in the airflow/dags folder.
 
-### Data Storage and Version Control
+Initialize Git and DVC: Initiate Git repository and DVC within the project directory. Use dvc init to set up DVC and add a remote storage.
 
-The transformed data is saved into a CSV file stored on Google Drive. Data Version Control (DVC) is employed to track changes in the dataset. The setup includes configuring DVC with a remote storage, adding data files to DVC tracking, and pushing updates to a Git repository.
+Start Airflow Services: Launch the Airflow webserver and scheduler to begin DAG orchestration.
 
-### Apache Airflow DAG
+Activate the DAG: Navigate to the Airflow web interface, locate the DAG, and enable or trigger it manually.
 
-The entire process is automated using an Apache Airflow DAG which schedules and executes these tasks daily. The DAG handles task dependencies and ensures robust error management throughout the workflow.
+Monitor Task Execution: Observe task execution progress and status through the Airflow web interface.
 
-## Challenges Encountered
+Data Extraction: Verify successful extraction of article titles and descriptions.
 
-Challenges encountered:
+Execute DVC Commands: Run dvc add and dvc push commands to version-control and store data files. Verify synchronization between DVC and Git repositories.
 
-1. Working with Airflow tool on Windows, it required installing Airflow with WSL Ubuntu.
+Conclusion
+This repository demonstrates the efficient deployment and monitoring of an MLOps workflow using Apache Airflow. By automating data handling processes and implementing version control, the workflow ensures reliability, reproducibility, and scalability in machine learning projects.
 
-2. Encountering errors when using the BashOperator which included not necessary permssions for accessing the Git credentials which was later solved after trial and error.
-
-## Step-by-Step Guide with Screenshots
-
-### Step 1: Prepare the Airflow DAG
-First, write the Python script for the Airflow DAG. Once written, copy the script to the `airflow/dags` folder to ensure it is recognized by Airflow.
-
-
-
-### Step 2: Initialize Git and DVC
-Initialize the Git repository and DVC within the project directory. Use `dvc init` to set up DVC and add a remote storage to manage the datasets versions.
-
-
-
-### Step 3: Start Airflow Services
-Launch the Airflow webserver and scheduler to begin orchestrating the DAGs. 
-
-### Step 4: Activate the DAG
-Navigate to the Airflow web interface, locate the "web-article-scrapping" DAG, and either enable it or trigger it manually.
-
-### Step 5: Monitor Task Execution
-Observe the execution of tasks within the DAG. The progress and status of each task can be viewed through the Airflow web interface.
-
-
-
-### Step 6: Data Extraction
-The title and descriptions of the articles were successfully extracted. The data salso included added columns for 'id' and 'source'.
-
-
-
-### Step 7: Execute DVC Commands
-After running `dvc add` and `dvc push`, the data files were successfully version-controlled and stored using both DVC and Git. The DVC manifest file, including the hash of the data file, was created and pushed to the remote storage. Simultaneously, the DVC files that describe the data were committed to the Git repository. This ensures synchronization and maintenance of the data and its version control metadata across both platforms.
 
 
 
